@@ -1,71 +1,144 @@
-import fetch from "node-fetch";
-import yts from "yt-search";
-
-const ytIdRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-
-const toSansSerifPlain = (text = "") =>
-  text.split("").map((char) => {
-    const map = {
-      a: "𝖺", b: "𝖻", c: "𝖼", d: "𝖽", e: "𝖾", f: "𝖿", g: "𝗀", h: "𝗁", i: "𝗂",
-      j: "𝗃", k: "𝗄", l: "𝗅", m: "𝗆", n: "𝗇", o: "𝗈", p: "𝗉", q: "𝗊", r: "𝗋",
-      s: "𝗌", t: "𝗍", u: "𝗎", v: "𝗏", w: "𝗐", x: "𝗑", y: "𝗒", z: "𝗓",
-      A: "𝖠", B: "𝖡", C: "𝖢", D: "𝖣", E: "𝖤", F: "𝖥", G: "𝖦", H: "𝖧", I: "𝖨",
-      J: "𝖩", K: "𝖪", L: "𝖫", M: "𝖬", N: "𝖭", O: "𝖮", P: "𝖯", Q: "𝖰", R: "𝖱",
-      S: "𝖲", T: "𝖳", U: "𝖴", V: "𝖵", W: "𝖶", X: "𝖷", Y: "𝖸", Z: "𝖹",
-      0: "𝟢", 1: "𝟣", 2: "𝟤", 3: "𝟥", 4: "𝟦", 5: "𝟧", 6: "𝟨", 7: "𝟩", 8: "𝟪", 9: "𝟫"
-    };
-    return map[char] || char;
-  }).join("");
-
-const formatViews = (views) => {
-  if (!views) return "Desconocido";
-  if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B`;
-  if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M`;
-  if (views >= 1_000) return `${(views / 1_000).toFixed(1)}k`;
-  return views.toString();
-};
+import yts from "yt-search"
+import fetch from "node-fetch"
 
 const handler = async (m, { conn, text }) => {
-  if (!text) return m.reply(toSansSerifPlain("✦ Ingresa el nombre o link de un video."));
+  if (!text) return m.reply("Escribe el nombre del video o un enlace de YouTube.")
 
-  // Reacción mientras busca el video
-  await conn.sendMessage(m.chat, {
-    react: { text: "🕐", key: m.key }
-  });
+  await m.react("🖤")
 
-  let video;
   try {
-    const ytId = ytIdRegex.exec(text);
-    const search = ytId ? await yts({ videoId: ytId[1] }) : await yts(text);
-    video = ytId ? search.video : search.all[0];
-  } catch {
-    return m.reply(toSansSerifPlain("✦ Error al buscar el video."));
+    let url = text
+    let title = "Desconocido"
+    let authorName = "Desconocido"
+    let durationTimestamp = "Desconocida"
+    let views = "Desconocidas"
+    let thumbnail = ""
+
+    if (!text.startsWith("https://")) {
+      const res = await yts(text)
+      if (!res?.videos?.length) return m.reply("No encontré nada.")
+      const video = res.videos[0]
+      title = video.title
+      authorName = video.author?.name
+      durationTimestamp = video.timestamp
+      views = video.views
+      url = video.url
+      thumbnail = video.thumbnail
+    }
+
+    const caption = `👻 Michi wa bot — Selección 
+
+👻 Título: ${title}
+🤍 Canal: ${authorName}
+🖤 Duración: ${durationTimestamp}
+👁️ Vistas: ${views}
+
+👻 Elige qué deseas descargar:`
+
+    const buttons = [
+      { buttonId: `shadowaudio ${url}`, buttonText: { displayText: "🎧 Descargar Audio" }, type: 1 },
+      { buttonId: `shadowvideo ${url}`, buttonText: { displayText: "🎥 Descargar Video" }, type: 1 }
+    ]
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        image: { url: thumbnail },
+        caption,
+        footer: "tech bot — Descargas",
+        buttons,
+        headerType: 4
+      },
+      { quoted: m }
+    )
+
+    await m.react("👻")
+
+  } catch (e) {
+    m.reply("Error: " + e.message)
+    m.react("⚠️")
+  }
+}
+
+handler.before = async (m, { conn }) => {
+  const selected = m?.message?.buttonsResponseMessage?.selectedButtonId
+  if (!selected) return
+
+  const parts = selected.split(" ")
+  const cmd = parts.shift()
+  const url = parts.join(" ")
+
+  if (cmd === "shadowaudio") {
+    return downloadMedia(conn, m, url, "mp3")
   }
 
-  if (!video) return m.reply(toSansSerifPlain("✦ No se encontró el video."));
+  if (cmd === "shadowvideo") {
+    return downloadMedia(conn, m, url, "mp4")
+  }
+}
 
-  const { title, timestamp, views, url, thumbnail, author, ago } = video;
+const downloadMedia = async (conn, m, url, type) => {
+  try {
+    const msg = type === "mp3"
+      ? "👻 Michi wa bot — Descargando audio..."
+      : "👻 Michi wa bot — Descargando video..."
 
-  const caption = [
-    "✧─── ･ ｡ﾟ★: *.✦ .* :★. ───✧",
-    "⧼ ᰔᩚ ⧽  M U S I C  -  Y O U T U B E",
-    "",
-    `» ✧ « *${title}*`,
-    `> ➩ Canal › *${author.name}*`,
-    `> ➩ Duración › *${timestamp}*`,
-    `> ➩ Vistas › *${formatViews(views)}*`,
-    `> ➩ Publicado › *${ago || "desconocido"}*`,
-    `> ➩ Link › *${url}*`,
-    "",
-    "> ✰ Responde con *Audio* o *Video* para descargar ✧"
-  ].join("\n");
+    const sent = await conn.sendMessage(m.chat, { text: msg }, { quoted: m })
 
-  await conn.sendMessage(m.chat, {
-    image: { url: thumbnail },
-    caption
-  }, { quoted: m });
-};
+    const apiUrl = type === "mp3"
+      ? `https://api-adonix.ultraplus.click/download/ytaudio?url=${encodeURIComponent(url)}&apikey=DemonKeytechbot`
+      : `https://api-adonix.ultraplus.click/download/ytvideo?url=${encodeURIComponent(url)}&apikey=DemonKeytechbot`
 
-handler.command = ["pla"];
-handler.register = true;
-export default handler;
+    const r = await fetch(apiUrl)
+    const data = await r.json()
+
+    if (!data?.status || !data?.data?.url) return m.reply("No se pudo descargar el archivo.")
+
+    const fileUrl = data.data.url
+    const fileTitle = cleanName(data.data.title || "video")
+
+    if (type === "mp3") {
+      await conn.sendMessage(
+        m.chat,
+        {
+          audio: { url: fileUrl },
+          mimetype: "audio/mpeg",
+          fileName: fileTitle + ".mp3"
+        },
+        { quoted: m }
+      )
+    } else {
+      await conn.sendMessage(
+        m.chat,
+        {
+          video: { url: fileUrl },
+          mimetype: "video/mp4",
+          fileName: fileTitle + ".mp4"
+        },
+        { quoted: m }
+      )
+    }
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        text: `👻 Michi wa — Completado\n\n🤍 Título: ${fileTitle}`,
+        edit: sent.key
+      }
+    )
+
+    await m.react("✅")
+
+  } catch (e) {
+    m.reply("Error: " + e.message)
+    m.react("❌")
+  }
+}
+
+const cleanName = (name) => name.replace(/[^\w\s-_.]/gi, "").substring(0, 50)
+
+handler.command = ["playcd", "ytcd", "ytsearchcd"]
+handler.tags = ["descargas"]
+handler.register = true
+
+export default handler
