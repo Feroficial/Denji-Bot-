@@ -2,11 +2,11 @@ import yts from "yt-search"
 import fetch from "node-fetch"
 
 const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply(`👻*Michi wabot invocando*
+  if (!text) return m.reply(`👻 *Michi wabot invocando*
 
 🤍 Pronuncia el nombre del video o entrega el enlace de YouTube.`)
 
-  await m.react("👻")
+  await m.react("⏰")
 
   try {
     let url = text
@@ -41,7 +41,7 @@ const handler = async (m, { conn, text, command }) => {
     } else if (isVideo) {
       await downloadMedia(conn, m, url, title, thumbnail, "mp4")
     } else {
-      await m.reply(`👻 *Michi wabot— Análisis navideño*
+      await m.reply(`👻 *Michi wabot — Análisis navideño*
 
 🖤 *Título:* ${title}
 🔔 *Canal:* ${authorName}
@@ -86,8 +86,8 @@ const downloadMedia = async (conn, m, url, title, thumbnail, type) => {
     }
 
     const apiUrl = type === "mp3"
-      ? `https://api-adonix.ultraplus.click/download/ytaudio?url=${encodeURIComponent(url)}&apikey=DemonKeytechbot`
-      : `https://api-adonix.ultraplus.click/download/ytvideo?url=${encodeURIComponent(url)}&apikey=DemonKeytechbot`
+      ? `https://api-adonix.ultraplus.click/download/ytaudio?url=${encodeURIComponent(url)}&apikey=WilkerKeydukz9l6871`
+      : `https://api-adonix.ultraplus.click/download/ytvideo?url=${encodeURIComponent(url)}&apikey=WilkerKeydukz9l6871`
 
     const response = await fetch(apiUrl)
     const data = await response.json()
@@ -135,7 +135,7 @@ const downloadMedia = async (conn, m, url, title, thumbnail, type) => {
     await m.react("✅")
 
   } catch (error) {
-    await m.reply(`👻 *Tech bot v1 — Falla en la entrega*
+    await m.reply(`🙃 Michi bot — Falla en la entrega*
 
 ❌ ${error.message}`)
     await m.react("❌")
@@ -144,7 +144,7 @@ const downloadMedia = async (conn, m, url, title, thumbnail, type) => {
 
 const cleanName = (name) => name.replace(/[^\w\s-_.]/gi, "").substring(0, 50)
 
-handler.command = handler.help = ["play9", "playaudio", "ytmp3", "play2", "playvid", "ytv", "ytmp4", "yt"]
+handler.command = handler.help = ["play", "playaudio", "ytmp3", "play2", "playvid", "ytv", "ytmp4", "yt"]
 handler.tags = ["descargas"]
 handler.register = true
 
