@@ -1,5 +1,5 @@
 //code creado por 
-// github.com/Ado-rgb
+// github.com/WILKER-OFC
 import fs from 'fs'
 
 const handler = async (msg, { conn, args }) => {
