@@ -18,43 +18,6 @@ Estos indicadores muestran el estado actualizado del proyecto en GitHub.
 
 ---
 
-## 💻 𝗚𝘂𝗶𝗮 𝗱𝗲 𝗜𝗻𝘀𝘁𝗮𝗹𝗮𝗰𝗶𝗼𝗻 𝗲𝗻 𝗧𝗲𝗿𝗺𝘂𝘅
-
-Sigue estos pasos para instalar y ejecutar Michi-WaBot en tu dispositivo.
-
-1.  **Concede Permisos de Almacenamiento**
-    ```bash
-    termux-setup-storage
-    ```
-
-2.  **Actualiza y Prepara el Entorno**
-    ```bash
-    apt update && apt upgrade -y
-    pkg install -y git nodejs ffmpeg imagemagick
-    ```
-
-3.  **Clona el Repositorio del Bot**
-    ```bash
-    git clone https://github.com/Ado-rgb/Michi-WaBot.git
-    ```
-
-4.  **Accede al Directorio del Proyecto**
-    ```bash
-    cd Michi-WaBot
-    ```
-
-5.  **Instala las Dependencias de Node.js**
-    ```bash
-    npm install
-    ```
-
-6.  **Inicia el Bot**
-    ```bash
-    npm start
-    ```
-
----
-
 ## 🤝 𝗖𝗿𝗲𝗱𝗶𝘁𝗼𝘀 𝘆 𝗔𝗴𝗿𝗮𝗱𝗲𝗰𝗶𝗺𝗶𝗲𝗻𝘁𝗼𝘀
 
 * **Creador y Mantenedor Principal:** [WILKER](https://github.com/WILKER-OFC)
@@ -69,9 +32,6 @@ Sigue estos pasos para instalar y ejecutar Michi-WaBot en tu dispositivo.
 
 ## 🦖 𝗥𝗲𝗰𝘂𝗿𝘀𝗼𝘀 𝗔𝗱𝗶𝗰𝗶𝗼𝗻𝗮𝗹𝗲𝘀
 
-* **💚 Adonix-API:** Una API útil, que te puede servir.
-    * [**https://api-adonix.ultraplus.click**](https://api-adonix.ultraplus.click)
-
 * **🌤 swallox Host:** Nuestro proveedor de hosting recomendado para proyectos.
     * <a href="https://dash.swallox.com">
           <img src="https://h.uguu.se/ariKTrAk.jpeg" alt="swalloz Host" width="150"/>
@@ -84,4 +44,4 @@ Sigue estos pasos para instalar y ejecutar Michi-WaBot en tu dispositivo.
 Este proyecto está bajo la **Licencia MIT**. Puedes usar, modificar y distribuir el código libremente, siempre y cuando mantengas los créditos originales.
 
 
-© 2026 WILKER OFC.
+© 2026 WILKER OFC
