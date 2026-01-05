@@ -116,6 +116,6 @@ const cleanName = (name) => name.replace(/[^\w\s-_.]/gi, "").substring(0, 50)
 // Solo comandos de video
 handler.command = handler.help = ["play2", "playvid", "ytv", "ytmp4"]
 handler.tags = ["descargas"]
-handler.register = true
+handler.register = false
 
 export default handler
