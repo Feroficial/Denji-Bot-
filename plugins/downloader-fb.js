@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_BASE = "https://api-adonix.ultraplus.click/download/facebook?apikey=dhsdhddb&url="
+const API_BASE = "https://gawrgura-api.onrender.com/download/facebook?url="
 
 function isValidUrl(u = "") {
   try {
@@ -74,17 +74,13 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       headers: { "User-Agent": "Mozilla/5.0" }
     })
 
-    if (!data || data.status !== true || !data.result) {
+    // Adaptación para la nueva API - estructura diferente
+    if (!data || !data.data) {
       throw new Error("Respuesta inválida de la API.")
     }
 
-    const info = data.result?.info || {}
-    const author = data.result?.author || {}
-    const media = data.result?.media || {}
-
-    const videoHD = media?.video_hd || ""
-    const videoSD = media?.video_sd || ""
-    const videoUrl = videoHD || videoSD
+    const videoData = data.data
+    const videoUrl = videoData?.urls?.hd || videoData?.urls?.sd || ""
 
     if (!videoUrl || !isValidUrl(videoUrl)) {
       throw new Error("No se encontró un enlace de video válido (HD/SD).")
@@ -92,10 +88,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const caption =
       `「✦」 *Facebook Downloader*\n\n` +
-      `≡ *Título:* ${info?.title ?? "N/A"}\n` +
-      `≡ *Link:* ${info?.permalink_url ?? url}\n` +
-      `≡ *Creación:* ${formatUnixSeconds(info?.creation_time)}\n` +
-      `≡ *Duración:* ${formatDuration(info?.duration)}\n\n`
+      (videoData?.title ? `≡ *Título:* ${videoData.title}\n` : "") +
+      `≡ *Link:* ${url}\n` +
+      (videoData?.duration ? `≡ *Duración:* ${formatDuration(videoData.duration)}\n\n` : "\n")
 
     await conn.sendMessage(
       chatId,
