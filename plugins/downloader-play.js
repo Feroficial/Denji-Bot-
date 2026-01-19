@@ -114,7 +114,7 @@ let handler2 = async (m, { conn, args, command }) => {
 }
 
 // Comandos
-handler.help = ['play <texto> <link>']
+handler.help = ['ytmp3 <link>']
 handler.tags = ['dl']
 handler.command = ['ytmp3', 'yta', 'ytmp3vd']
 
