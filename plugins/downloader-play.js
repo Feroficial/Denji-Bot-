@@ -36,7 +36,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       message: {
         documentMessage: {
           title: `『 ${title} 』`,
-          fileName: global.botname || "Wamichibot",
+          fileName: global.botname || "Shadow Bot",
           jpegThumbnail: thumb3
         }
       }
@@ -51,8 +51,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 ⏳ 𝑫𝒖𝒓𝒂𝒄𝒊𝒐́𝒏: ${durationTimestamp}
 🌐 𝑬𝒏𝒍𝒂𝒄𝒆: ${url}
 
- ✧━───『 *Michi Wabot* 』───━✧
-    ⚡  *By WILKER OFC* ⚡
+✧━───『 *Michi Wabot* 』───━✧
+⚡ *Powered by WILKER OFC* ⚡
 `
 
     const thumb = (await conn.getFile(thumbnail)).data
@@ -61,7 +61,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       {
         image: thumb,
         caption,
-        footer: "⚡ Michi wabot — Descargas rápidas ⚡",
+        footer: "⚡ Michi wa — Descargas rápidas ⚡",
         buttons: [
           { buttonId: `shadowaudio ${url}`, buttonText: { displayText: "🎵 𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙧 𝘼𝙪𝙙𝙞𝙤" }, type: 1 },
           { buttonId: `shadowvideo ${url}`, buttonText: { displayText: "🎬 𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙧 𝙑𝙞𝙙𝙚𝙤" }, type: 1 }
@@ -159,6 +159,6 @@ const formatViews = (views) => {
 
 handler.command = ["play", "yt", "ytsearch"]
 handler.tags = ["descargas"]
-handler.register = false
+handler.register = true
 
 export default handler
