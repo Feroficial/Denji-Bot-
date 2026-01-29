@@ -1,7 +1,7 @@
 {
-  "name": "Michi-wa-md",
+  "name": "Denji-bot-md",
   "version": "1.0.0",
-  "description": "Michi Multi Device",
+  "description": "Denji Multi Device",
   "main": "index.js",
   "type": "module",
   "directories": {
