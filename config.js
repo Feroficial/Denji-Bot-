@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url'
 
 global.owner = [
 
-  ['50432788804', 'Fer', true],
+  ['50432788804', 'OFC', true],
 
   ['50492777136', 'Fer'] // si quieres, puedes poner nombre aquí
 
